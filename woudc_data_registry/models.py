@@ -211,7 +211,6 @@ class Station(base):
     name = Column(String, nullable=False)
     contributor_id = Column(String, ForeignKey('contributors.identifier'),
                             nullable=True)
-    stn_type = Column(stn_type_enum, nullable=False)
     gaw_id = Column(String, nullable=True)
     country_id = Column(String, ForeignKey('countries.identifier'),
                         nullable=False)
@@ -236,16 +235,18 @@ class Station(base):
 
         self.identifier = dict_['identifier']
         self.name = dict_['name']
-        self.stn_type = dict_['stn_type']
         self.gaw_id = dict_['gaw_id']
         self.country_id = dict_['country_id']
         self.contributor_id = dict_['contributor_id']
         self.wmo_region = dict_['wmo_region']
         self.active_start_date = dict_['active_start_date']
-        self.active_end_date = dict_['active_end_date']
         self.x = dict_['x']
         self.y = dict_['y']
         self.z = dict_['z']
+        
+        if dict_['active_end_date'] == '':
+            dict_['active_end_date'] = None
+            self.active_end_date = dict_['active_end_date']
 
     def __geo_interface__(self):
         coordinates = [self.x, self.y]
